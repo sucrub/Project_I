@@ -2,9 +2,11 @@
 #include<time.h>
 using namespace std;
 
-#define N 10000
+#define N 1000
 const int MAX = N + 100;
-bool used[N + 1]; // = used[i] = true -> i thuoc cay khung
+bool used_no_priority[N + 1];
+bool used_priority[N + 1]; // = used[i] = true -> i thuoc cay khung
+int parent[N + 1], d[N + 1];
 int index = 0;
 
 struct Edge{
@@ -43,7 +45,7 @@ void prim_no_priority(int u, Edge *mt) {
 
     vector<Edge> MST;
     int d = 0; //chieu dai cay khung
-    used[u] = true;
+    used_no_priority[u] = true;
     while(MST.size() < N - 1) {
 
         int min_w = MAX;
@@ -56,7 +58,7 @@ void prim_no_priority(int u, Edge *mt) {
         // them vao cay, dinh do thanh da used
         for(int i = 0; i < N; i++) {  
 
-            if(used[i]) {
+            if(used_no_priority[i]) {
 
                 // for(pair<int, int> it : adj[i]) {
 
@@ -71,7 +73,7 @@ void prim_no_priority(int u, Edge *mt) {
 //////something is wrong here
                 for(int j = 0; j < N - 1; j++) {
 
-                    if(!used[mt[j + i * N - i].v] && mt[j + i * N - i].weight < min_w) {
+                    if(!used_no_priority[mt[j + i * N - i].v] && mt[j + i * N - i].weight < min_w) {
 
                         min_w = mt[j + i * N - i].weight;
                         X = mt[j + i * N - i].v;
@@ -83,29 +85,71 @@ void prim_no_priority(int u, Edge *mt) {
         }
         MST.push_back({X, Y, min_w});
         d += min_w;
-        used[X] = true;
+        used_no_priority[X] = true;
     }
-    cout << "MST: " << d << endl;
+    cout << d << endl;
     // for(Edge e : MST) {
     //     cout << e.u << " " << e.v << " " << e.weight << endl;
     // }
 }
 
+void prim_priority(int u,Edge *mt) {
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+    vector<Edge> MST;
+    int sum = 0;
+    Q.push({0, u});
+    while(!Q.empty()) {
+
+        pair<int, int> top = Q.top();
+        Q.pop();
+        int vertex = top.second;
+        int weight = top.first;
+
+        if(used_priority[vertex]) continue;
+        sum += weight;
+        used_priority[vertex] = true;
+        if(u != vertex) {
+            MST.push_back({vertex, parent[vertex], weight});
+        }
+        for(int j = 0; j < N - 1; j++) {
+            int Y = mt[vertex * N - vertex + j].v;
+            int W = mt[vertex * N - vertex + j].weight;
+            if(!used_priority[Y] && W < d[Y]) {
+
+                Q.push({W, Y});
+                d[Y] = W;
+                parent[Y] = vertex;
+            }
+        }
+    }
+    cout << sum << endl;
+}
+
 int main() {
 
 	clock_t start, end;
-	double time_use_1, time_use_2;
+	double time_prim_no_priority, time_prim_priority;
 
-    memset(used, false, sizeof(used));
+    memset(used_no_priority, false, sizeof(used_no_priority));
+    memset(used_priority, false, sizeof(used_priority));
+    memset(d, MAX, sizeof(d));
 
-	Edge *graph = new Edge[N * N];
+	Edge *graph_for_prim = new Edge[N * N];
 
-	generate_graph(graph);
+	generate_graph(graph_for_prim);
+
     start = clock();
-    prim_no_priority(0, graph);
+    prim_no_priority(0, graph_for_prim);
     end = clock();
-    time_use_1 = (double)(end - start) / CLOCKS_PER_SEC;
-    cout << time_use_1;
-	delete []graph;
+    time_prim_no_priority = (double)(end - start) / CLOCKS_PER_SEC;
+
+    start = clock();
+    prim_priority(0, graph_for_prim);
+    end = clock();
+    time_prim_priority = (double)(end - start) / CLOCKS_PER_SEC;
+
+    cout << time_prim_no_priority << endl << time_prim_priority;
+	delete []graph_for_prim;
 
 }

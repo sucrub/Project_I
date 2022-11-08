@@ -41,7 +41,7 @@ void generate_graph(Edge *mt) {
     }
 }
 
-void prim(int u,Edge *mt) {
+void prim_no_priority(int u,Edge *mt) {
 
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
     vector<Edge> MST;
@@ -86,7 +86,7 @@ int main() {
 
 	generate_graph(graph);
     start = clock();
-    prim(0, graph);
+    prim_no_priority(0, graph);
     end = clock();
     time_use_1 = (double)(end - start) / CLOCKS_PER_SEC;
     cout << time_use_1;
