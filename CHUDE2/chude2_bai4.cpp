@@ -2,7 +2,7 @@
 #include<time.h>
 using namespace std;
 
-#define N 100
+#define N 1000
 const int MAX = N + 100;
 int parent_for_DSU[N + 1];
 int parent_for_non_DSU[N + 1];

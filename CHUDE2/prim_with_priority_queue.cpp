@@ -57,6 +57,7 @@ void prim_no_priority(int u,Edge *mt) {
         if(used[vertex]) continue;
         sum += weight;
         used[vertex] = true;
+        // khong xet dinh dau tien 
         if(u != vertex) {
             MST.push_back({vertex, parent[vertex], weight});
         }

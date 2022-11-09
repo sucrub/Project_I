@@ -2,9 +2,8 @@
 #include<time.h>
 using namespace std;
 
-#define N 10000
+#define N 1000
 int parent_for_DSU[N + 1];
-int parent_for_non_DSU[N + 1];
 int size[N + 1];
 int index = 0;
 
@@ -74,12 +73,6 @@ void make_set_for_DSU() {
     }
 }
 
-void make_set_for_non_DSU() {
-    for(int i = 0; i < N; i++) {
-        parent_for_non_DSU[i] = i;
-    }
-}
-
 //cmp
 bool cmp(Edge a, Edge b) {
 
@@ -132,36 +125,10 @@ void kruskal_DSU(Edge *mt) {
     cout << "MST cost: " << min_cost << endl;
 }
 
-//O(ElogV + V^2)
-void kruskal_non_DSU(Edge *mt) {
-
-    int min_cost = 0;
-    make_set_for_non_DSU();
-    int edge_count = 0;
-    for(int i = 0; i < index; i++) {
-
-        if(parent_for_non_DSU[mt[i].u] != parent_for_non_DSU[mt[i].v]) { 
-
-            min_cost += mt[i].weight;
-            //cout << "Edge " << edge_count++ << ": " << mt[i].u << "-" << mt[i].v << ": " << mt[i].weight << endl;
-            int old_parent = parent_for_non_DSU[mt[i].u];
-            int new_parent = parent_for_non_DSU[mt[i].v];
-            for(int j = 0; j < N; j++) {
-
-                if(parent_for_non_DSU[j] == old_parent)
-                    parent_for_non_DSU[j] = new_parent;
-            }
-        }
-    }
-    cout << "MST cost: " << min_cost << endl;
-}
-
 int main() {
 
-    cout << setprecision(10);
-
     clock_t start, end;
-    double time_kruskal_non_DSU, time_kruskal_DSU, time_sort;
+    double time_kruskal_DSU, time_sort;
     Edge *graph_for_kruskal = new Edge[N * N];
 
     generate_graph(graph_for_kruskal);
@@ -172,15 +139,10 @@ int main() {
     time_sort = (double)(end - start) / CLOCKS_PER_SEC;
 
     start = clock();
-    kruskal_non_DSU(graph_for_kruskal);
-    end = clock();
-    time_kruskal_non_DSU = (double)(end - start) / CLOCKS_PER_SEC;
-
-    start = clock();
     kruskal_DSU(graph_for_kruskal);
     end = clock();
     time_kruskal_DSU = (double)(end - start) / CLOCKS_PER_SEC;
 
     delete []graph_for_kruskal;
-    cout << "Non DSU time: " << time_kruskal_non_DSU + time_sort << endl <<  "DSU time: " << time_kruskal_DSU + time_sort;
+    cout << "DSU time: " << time_kruskal_DSU + time_sort;
 }

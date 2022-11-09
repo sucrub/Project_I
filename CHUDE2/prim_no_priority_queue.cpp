@@ -2,7 +2,7 @@
 #include<time.h>
 using namespace std;
 
-#define N 10000
+#define N 100
 const int MAX = N + 100;
 bool used[N + 1]; // = used[i] = true -> i thuoc cay khung
 int index = 0;
@@ -57,18 +57,6 @@ void prim_no_priority(int u, Edge *mt) {
         for(int i = 0; i < N; i++) {  
 
             if(used[i]) {
-
-                // for(pair<int, int> it : adj[i]) {
-
-                //     int j = it.first, weight = it.second;
-                //     if(!used[j] && weight < min_w) {
-
-                //         min_w = weight;
-                //         X = j;
-                //         Y = i;
-                //     }
-                // }
-//////something is wrong here
                 for(int j = 0; j < N - 1; j++) {
 
                     if(!used[mt[j + i * N - i].v] && mt[j + i * N - i].weight < min_w) {

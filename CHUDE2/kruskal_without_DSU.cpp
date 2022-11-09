@@ -2,10 +2,8 @@
 #include<time.h>
 using namespace std;
 
-#define N 10000
-int parent_for_DSU[N + 1];
+#define N 1000
 int parent_for_non_DSU[N + 1];
-int size[N + 1];
 int index = 0;
 
 struct Edge{
@@ -67,13 +65,6 @@ void generate_graph(Edge *mt) {
 }
 
 /// DSU
-void make_set_for_DSU() {
-    for(int i = 0; i < N; i++) {
-        parent_for_DSU[i] = i;
-        size[i] = 1;
-    }
-}
-
 void make_set_for_non_DSU() {
     for(int i = 0; i < N; i++) {
         parent_for_non_DSU[i] = i;
@@ -86,52 +77,10 @@ bool cmp(Edge a, Edge b) {
     return a.weight < b.weight;
 }
 
-int find_set(int i) {
-
-    if(i == parent_for_DSU[i])
-        return i;
-    return parent_for_DSU[i] = find_set(parent_for_DSU[i]);
-}
-
-void union_set(int a, int b) {
-
-    a = find_set(a);
-    b = find_set(b);
-    if(a != b) {
-
-        if(size[a] < size[b]) {
-            parent_for_DSU[a] = b;
-            size[b] += size[a];
-        }
-        else {
-            parent_for_DSU[b] = a;
-            size[a] += size[b];
-        }
-    }
-}
-
 /////
 
 
 //////////////////////////////////////////////////
-//O(ElogV + E + V)
-void kruskal_DSU(Edge *mt) {
-
-    int min_cost = 0;
-    make_set_for_DSU();
-    int edge_count = 0;
-    for(int i = 0; i < index; i++) {
-
-        if(find_set(mt[i].u) != find_set(mt[i].v)) {
-
-            min_cost += mt[i].weight;
-            //cout << "Edge " << edge_count++ << ": " << mt[i].u << "-" << mt[i].v << ": " << mt[i].weight << endl;
-            union_set(mt[i].u, mt[i].v);
-        }
-    }
-    cout << "MST cost: " << min_cost << endl;
-}
-
 //O(ElogV + V^2)
 void kruskal_non_DSU(Edge *mt) {
 
@@ -158,10 +107,8 @@ void kruskal_non_DSU(Edge *mt) {
 
 int main() {
 
-    cout << setprecision(10);
-
     clock_t start, end;
-    double time_kruskal_non_DSU, time_kruskal_DSU, time_sort;
+    double time_kruskal_non_DSU, time_sort;
     Edge *graph_for_kruskal = new Edge[N * N];
 
     generate_graph(graph_for_kruskal);
@@ -176,11 +123,6 @@ int main() {
     end = clock();
     time_kruskal_non_DSU = (double)(end - start) / CLOCKS_PER_SEC;
 
-    start = clock();
-    kruskal_DSU(graph_for_kruskal);
-    end = clock();
-    time_kruskal_DSU = (double)(end - start) / CLOCKS_PER_SEC;
-
     delete []graph_for_kruskal;
-    cout << "Non DSU time: " << time_kruskal_non_DSU + time_sort << endl <<  "DSU time: " << time_kruskal_DSU + time_sort;
+    cout << "Non DSU time: " << time_kruskal_non_DSU + time_sort << endl;
 }

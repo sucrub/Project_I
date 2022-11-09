@@ -2,7 +2,7 @@
 #include<time.h>
 using namespace std;
 
-#define N 10000
+#define N 100
 const int MAX = N + 100;
 bool used_no_priority[N + 1];
 bool used_priority[N + 1]; // = used[i] = true -> i thuoc cay khung
