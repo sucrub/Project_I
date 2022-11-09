@@ -2,7 +2,7 @@
 #include<time.h>
 using namespace std;
 
-#define N 1000
+#define N 100
 const int MAX = N + 100;
 int parent_for_DSU[N + 1];
 int parent_for_non_DSU[N + 1];
@@ -74,14 +74,14 @@ void generate_graph(Edge *kruskal, Edge *prim) {
 }
 
 /// DSU
-void make_set_1() {
+void make_set_for_DSU() {
     for(int i = 0; i < N; i++) {
         parent_for_DSU[i] = i;
         size[i] = 1;
     }
 }
 
-void make_set_2() {
+void make_set_for_non_DSU() {
     for(int i = 0; i < N; i++) {
         parent_for_non_DSU[i] = i;
     }
@@ -125,7 +125,7 @@ void union_set(int a, int b) {
 void kruskal_DSU(Edge *mt) {
 
     int min_cost = 0;
-    make_set_1();
+    make_set_for_DSU();
     int edge_count = 0;
     for(int i = 0; i < index_kruskal; i++) {
 
@@ -143,7 +143,7 @@ void kruskal_DSU(Edge *mt) {
 void kruskal_non_DSU(Edge *mt) {
 
     int min_cost = 0;
-    make_set_2();
+    make_set_for_non_DSU();
     int edge_count = 0;
     for(int i = 0; i < index_kruskal; i++) {
 
@@ -279,6 +279,8 @@ int main() {
     end = clock();
     time_kruskal_DSU = (double)(end - start) / CLOCKS_PER_SEC;
 
+    delete []graph_for_kruskal;
+
     start = clock();
     prim_no_priority(0, graph_for_prim);
     end = clock();
@@ -289,8 +291,8 @@ int main() {
     end = clock();
     time_prim_priority = (double)(end - start) / CLOCKS_PER_SEC;
 
-    delete []graph_for_kruskal;
     delete []graph_for_prim;
+    
     cout << "Non DSU time: " << time_kruskal_non_DSU + time_sort << endl <<  "DSU time: " << time_kruskal_DSU + time_sort << endl;
     cout << "No priority time: " << time_prim_no_priority << endl << "Priority time: " << time_prim_priority << endl;;
 }

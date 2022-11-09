@@ -67,14 +67,14 @@ void generate_graph(Edge *mt) {
 }
 
 /// DSU
-void make_set_1() {
+void make_set_for_DSU() {
     for(int i = 0; i < N; i++) {
         parent_for_DSU[i] = i;
         size[i] = 1;
     }
 }
 
-void make_set_2() {
+void make_set_for_non_DSU() {
     for(int i = 0; i < N; i++) {
         parent_for_non_DSU[i] = i;
     }
@@ -118,7 +118,7 @@ void union_set(int a, int b) {
 void kruskal_DSU(Edge *mt) {
 
     int min_cost = 0;
-    make_set_1();
+    make_set_for_DSU();
     int edge_count = 0;
     for(int i = 0; i < index; i++) {
 
@@ -136,7 +136,7 @@ void kruskal_DSU(Edge *mt) {
 void kruskal_non_DSU(Edge *mt) {
 
     int min_cost = 0;
-    make_set_2();
+    make_set_for_non_DSU();
     int edge_count = 0;
     for(int i = 0; i < index; i++) {
 
