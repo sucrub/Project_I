@@ -1,8 +1,10 @@
 #include <iostream>
+#include <time.h>
 using namespace std;
 
-#define N 100
-const int MAX = N + 100
+#define N 1000
+const int MAX = N + 100;
+int index = 0;
 
 struct Edge{
 
@@ -27,7 +29,7 @@ void generate_graph(Edge *mt) {
             else {
                 mt[index].u = i;
                 mt[index].v = j;
-                mt[index].weight = rand() % (N - 1 + 1) + 1;
+                mt[index].weight = rand() % (N - 10 + 1) + 10;
                 temp[i][j] = mt[index].weight;
                 index++;
             }
@@ -39,9 +41,9 @@ void generate_graph(Edge *mt) {
 int minDistance(int dist[], bool sptSet[]) {
 
 	// Khai báo giá trị 
-	int min = INT_MAX, min_index;
+	int min = MAX, min_index;
 
-	for (int v = 0; v < V; v++)
+	for (int v = 0; v < N; v++)
 		if (sptSet[v] == false && dist[v] <= min)
 			min = dist[v], min_index = v;
 
@@ -51,7 +53,7 @@ int minDistance(int dist[], bool sptSet[]) {
 void printSolution(int dist[]) {
 
 	cout << "Vertex \t Distance from Source" << endl;
-	for (int i = 0; i < V; i++)
+	for (int i = 0; i < N; i++)
 		cout << i << " \t\t\t\t" << dist[i] << endl;
 }
 
@@ -65,7 +67,7 @@ void dijkstra(Edge *graph, int src) {
 
     // gán giá trị cho mọi điểm là MAX và chưa sử dụng điểm đấy 
 	for (int i = 0; i < N; i++)
-		dist[i] = INT_MAX, sptSet[i] = false;
+		dist[i] = MAX, sptSet[i] = false;
 
 	// Khoảng cách từ nguồn tới chính nó luôn bằng 0 
 	dist[src] = 0;
@@ -87,10 +89,10 @@ void dijkstra(Edge *graph, int src) {
 			// there is an edge from u to v, and total
 			// weight of path from src to v through u is
 			// smaller than current value of dist[v]
-			if (!sptSet[graph[u * N - u + v].v] && graph[u][v]
-				&& dist[u] != INT_MAX
-				&& dist[u] + graph[u][v] < dist[v])
-				dist[v] = dist[u] + graph[u][v];
+			if (!sptSet[graph[u * N - u + v].v]
+				&& dist[graph[u * N - u + v].u] != MAX
+				&& dist[graph[u * N - u + v].u] + graph[u * N - u + v].weight < dist[graph[u * N - u + v].v])
+				dist[graph[u * N - u + v].v] = dist[graph[u * N - u + v].u] + graph[u * N - u + v].weight;
 	}
 
 	// print the constructed distance array
@@ -100,11 +102,10 @@ void dijkstra(Edge *graph, int src) {
 // driver's code
 int main() {
 
-    Edge *graph = new Edge[N * N];
+	Edge *graph = new Edge[N * N];
+    generate_graph(graph);
 
 	dijkstra(graph, 0);
 
 	delete []graph;
 }
-
-// This code is contributed by shivanisinghss2110
