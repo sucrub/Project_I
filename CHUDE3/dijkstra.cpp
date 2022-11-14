@@ -3,7 +3,7 @@
 using namespace std;
 
 #define N 1000
-const int MAX = N + 100;
+const int MAX = N*N + 100;
 int index = 0;
 
 struct Edge{
