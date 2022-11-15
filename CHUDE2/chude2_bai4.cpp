@@ -21,6 +21,8 @@ struct Edge{
 // khoi tao ngau nhien do thi day du
 void generate_graph(Edge *kruskal, Edge *prim) {
 
+    srand(time(NULL)); 
+
     // for(int i = 0; i < N; i++) {
     //     for(int j = 0; j < N; j++) {
     //         if (i >= j)

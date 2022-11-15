@@ -16,6 +16,8 @@ struct Edge{
 
 void generate_graph(Edge *mt) {
 
+    srand(time(NULL)); 
+
     int **temp = new int *[N];
     for(int i = 0; i < N; i++) {
         temp[i] = new int [N];

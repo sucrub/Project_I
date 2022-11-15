@@ -12,12 +12,14 @@ long long dist_priority[N];
 // trả về true nếu điểm i đã được set 
 bool check_no_priority[N];
 
-struct Edge{
+struct Edge {
 
 	int u, v, weight;
 };
 
 void generate_graph(Edge *mt) {
+
+	srand(time(NULL)); 
 
     int **temp = new int *[N];
     for(int i = 0; i < N; i++) {
@@ -67,7 +69,7 @@ void printSolution() {
 	else cout << "Wrong answer!" << endl;
 }
 
-void dijkstra_priority(Edge *graph){
+void dijkstra_priority(Edge *graph) {
 	dist_priority[0] = 0;
 	priority_queue<pair<int, int>, vector<pair<int, int>> , greater<pair<int,int>>> Q;
 	//{khoang cach, dinh}
@@ -148,6 +150,7 @@ int main() {
     time_priority = (double)(end - start) / CLOCKS_PER_SEC;
 
 	printSolution();
+
     cout << "Time with no priority: " << time_no_priority << endl 
 		<< "Time with priority: " << time_priority;
 
