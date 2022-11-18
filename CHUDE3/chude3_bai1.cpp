@@ -49,7 +49,7 @@ void generate_graph(Edge *mt) {
 int minDistance() {
 
 	// Khai báo giá trị 
-	int min = 2000, min_index;
+	int min = 5000, min_index;
 
 	for (int v = 0; v < N; v++)
 		if (check_no_priority[v] == false && dist_no_priority[v] <= min)
@@ -116,7 +116,7 @@ void dijkstra_no_priority(Edge *graph) {
 			// weight of path from src to v through u is
 			// smaller than current value of dist[v]
 			if (!check_no_priority[graph[u * N - u + v].v]
-				&& dist_no_priority[graph[u * N - u + v].u] != 2000
+				&& dist_no_priority[graph[u * N - u + v].u] != 5000
 				&& dist_no_priority[graph[u * N - u + v].u] + graph[u * N - u + v].weight < dist_no_priority[graph[u * N - u + v].v])
 				dist_no_priority[graph[u * N - u + v].v] = dist_no_priority[graph[u * N - u + v].u] + graph[u * N - u + v].weight;
 	}
@@ -131,8 +131,8 @@ int main() {
     double time_no_priority, time_priority;
 
 	for(int i = 0; i < N; i++) {
-		dist_no_priority[i] = 2000;
-		dist_priority[i] = 2000;
+		dist_no_priority[i] = 5000;
+		dist_priority[i] = 5000;
 		check_no_priority[i] = false;
 	}
 

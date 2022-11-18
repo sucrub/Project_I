@@ -103,6 +103,7 @@ int emonds_Karp() {
 
     while(bfs(rGraph, parent)) {
         int path_flow = INT_MAX;
+        // tìm ngược lại đường đi
         for(v = N - 1; v != 0; v = parent[v]) {
             u = parent[v];
             path_flow = min(path_flow, rGraph[u][v]);
@@ -116,11 +117,7 @@ int emonds_Karp() {
 
         max_flow += path_flow;
     }
-
     return max_flow;
-
-
-
 }
 
 // Edmonds_Karp
