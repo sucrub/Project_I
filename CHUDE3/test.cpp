@@ -114,7 +114,7 @@ struct Point {
     int x, y;
 };
 
-struct queueNode {
+struct queuePoint {
     Point pt;
     int dist;
 };
@@ -144,11 +144,11 @@ int BFS(int **base, Point start, Point end) {
         }
     }
     visited[start.x][start.y] = true;
-    queue<queueNode> q;
-    queueNode s = {start, 0};
+    queue<queuePoint> q;
+    queuePoint s = {start, 0};
     q.push(s);
     while(!q.empty()) {
-        queueNode curr = q.front();
+        queuePoint curr = q.front();
         Point pt = curr.pt;
         if(pt.x == end.x && pt.y == end.y)
             return curr.dist;
@@ -158,7 +158,7 @@ int BFS(int **base, Point start, Point end) {
             int col = pt.y + colNum[i];
             if(isValid(row, col) && base[row][col] && !visited[row][col]) {
                 visited[row][col] = true;
-                queueNode Adjcell = {{row, col}, curr.dist + 1};
+                queuePoint Adjcell = {{row, col}, curr.dist + 1};
                 q.push(Adjcell);
             }
         }

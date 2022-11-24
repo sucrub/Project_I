@@ -102,10 +102,18 @@ void dijkstra(Edge *graph, int src) {
 // driver's code
 int main() {
 
+	clock_t start, end;
+    double time;
+
 	Edge *graph = new Edge[N * N];
     generate_graph(graph);
 
+	start = clock();
 	dijkstra(graph, 0);
+	end = clock();
+
+	time = (double)(end - start) / CLOCKS_PER_SEC;
+	cout << time;
 
 	delete []graph;
 }

@@ -1,78 +1,50 @@
-int minTime(vector<string> park) {
-//     // BẢNG COST[i][j]: đường đi ngắn nhất từ xe i đến chỗ j, dùng BFS
-
-//     // N cars, M parking slot
-//     // build a cost matrix cost[i][j] = cost of getting from car i to 
-//     //      parking spot j, by doing a BFS
-//     // vertices 0, 1, ..., N - 1 will represent the cars, and 
-//     //      vertices N, N + 1, ..., N + M - 1 will represent
-//     //          the parking spots; N + M will be the super-sink
-//     int D = 0, sink = N + M;
-//     // car_match[i] = j : xe i đỗ ở chỗ j
-//     // prev_match[i] = j : chỗ đỗ xe i có xe j
-//     int car_match[105], park_match[105];
-//     memset(car_match, -1, sizeof(car_match));
-//     memset(park_match, -1, sizeof(park_match));
-//     // duyệt tất cả xe, mỗi lần duyệt xe thì 
-//     for(int source = 0; source < N; ++source) {
-//         // chưa cho ... duyệt cả 
-//         bool visited[210];
-//         memset(visited, false, sizeof(visited));
-//         // from 
-//         int from[210];
-//         memset(from, -1, sizeof(from));
-//         priority_queue<node> pq;
-//         // where, cost, from 
-//         pq.push(node(source, 0, -1));
-//         while(!pq.empty()) {
-//             // cost: giá trị 
-//             int cst = pq.top().cost;
-//             // where: đang xét cái gì ?  
-//             int where = pq.top().where;
-//             // from: từ đâu 
-//             int _from = pq.top().from;
-//             pq.pop();
-//             // đã duyệt vị trí này 
-//             if(visited[where]) continue;
-//             visited[where] = true;
-//             // vị trí này từ from ?
-//             from[where] = _from;
-//             // nếu là xe, xe [where] thử tất cả M chỗ đỗ xe 
-//             if(where < N) {
-//                 // duyệt tất cả các chỗ đỗ
-//                 for(int i = 0; i < M; ++i) {
-//                     // nếu không thể đến hoặc xe này đã đỗ ở chỗ này thì bỏ qua 
-//                     if(cost[where][i] == INF || car_match[where] == i) continue;
-//                     int ncst = max(cst, cost[where][i]);
-//                     // chỗ đỗ xe thứ i là N + i 
-//                     pq.push(node(N + i, ncst, where));
-//                 }
-//             }
-//             else {
-//                 // nếu chỗ đỗ xe này is unmatched thì tìm đường đi hợp lệ với giá trị nhỏ nhất 
-//                 if(park_match[where - N] == -1) {
-//                     from[sink] = where;
-//                     // Nếu D cần tăng thì tăng 
-//                     D = max(D, cst);
-//                     break;
-//                 }
-//                 int ncst = max(cst, cost[next][where]);
-//                 pq.push(node(next, ncst, where));
-//             }
-//         }
-//         int where = from[sink];
-//         // nếu không có đường đi hợp lệ trả về -1 
-//         if (where == -1)
-//             return -1;
-//         int prev = from[where];
-//         // nếu where là chỗ đỗ xe thì cạnh (prev, where) is a foward edge and the match must be updated
-//         if (where >= N) {
-//             // xe [prev] đỗ ở [where] là chỗ đỗ xe 
-//             car_match[prev] = where;
-//             // vị trí đỗ xe ở [where] có xe prev
-//             park_match[where - N] = prev;
-//         }
-//         where = prev;
-//     }
-//     return D;
-// }
+{"P.....P...X.XX.X.X..X...XXXX.....X..P......X.P....", 
+"...XX..P..X...X.X..X..X..X..XX.X.XX....XXX....X...", 
+"X.X..XX..XX..XP.......X....X.X.....PX...........XX", 
+"..XXX..X...X.......X....X..X.X..X.XX.X.XX..P.XX...", 
+".XX.X.PXP......XX.XXXX......XX.....XXXXXX..X..X...", 
+".XX.......X...X..XXXX.X.XX..........X...XX......X.", 
+".PX......XXX.XX.XPX..X....XX.X.X...XXP..XX...XX...", 
+"..X..........X..X...X.X.X.X....X.XP....X..PX......", 
+".X...X.X.........X..........X.XXXXXX.X....X...XXXX", 
+".X.P..........XX......X.P..P.X.....X..XPX.P..P..XX", 
+"....X......X.XX.XXX.X..PX.XX......X......C.X....XX", 
+".......X...XX.XPX.X.XX.XC.XX..X...X..X....PXXX....", 
+".XX..X..X.....X....X...........X.X..XX...X...X....", 
+"X......C...X.X..X....XX.X..........P......X...XP..", 
+".X.XXXP.XX.X.X..XX.PPX....X.....X..XX......XXCXXX.", 
+"X.XX..........XXXX.......X....X.....P.X.X...X.XP.P", 
+".XX.X.....X.PXX.XC.X.XXP.....PX.P.........X..X...X", 
+"X........PXX......X......XXPX..P...X..X....X..XP..", 
+"...X.PX....XX...XX....X.X.P......XX.X.X...X...X...", 
+"....X.XX......PX.X.PX..X..XXX.C..X.XPX.X.X....P.XX", 
+".XXP.XXX.XX.XX...XX.XX.X..XX...X.X.....PX...X..X..", 
+".X.....X.XXP...X.....X...XXXXX.X.X........X..X.X.X", 
+"X..X...X..XX..P.X.XXX..XXXPX.X...XX...X.X.......X.", 
+".XXXXXXXX..X....X.X.X.X..........XP.....X.......X.", 
+".....X.XXXXX..........XP...X....PXX.X...........XX", 
+".XXX....X......X.....X.XX..X......XXX......XXX..XX", 
+"......X....XX...X.XXX...X..X.P...X.XX...XX.X.X..XX", 
+"X..P..XX.XP.....X.XXXX.X......X...P..X.PXX.XX.....", 
+".XX...X..X...X......P...X...PXPX.XX....X......X...", 
+"X......X.XX..XXX.X.......XX..X....X.X.X.X.P..XXX.X", 
+"....X.X.X.XX...X.X.XXPX.XX.P.X..X.X.XX.XXX...X....", 
+".XX.X..X....X....X..XX.XX..P.XX.....XX..XP.X.XXXXX", 
+".....XXXX..P.XP...X...X...X.XPX.XX........X....XXX", 
+"..X.....XX...X.........X.X.X.....X.X.XX.XXX.......", 
+"X...X......P..P.P..X....P...XX..X.......X.....X.X.", 
+"XX.X....X.X.X.PXX.X..X..XX........X.......XXXX...X", 
+".X.X..X..X.X.....X.........X..P.X.....X..XX.X.....", 
+".XX.........X.XX....XX.....XX..XX.XXXXXXXX....XP.X", 
+"X.P...X..XX.XP...X..P.X.X....XP....PXX...X.X...X..", 
+"......XX.XXX...X.....XX.X....XX..P...C.XX.X...X.X.", 
+"..X.....X......X.XC..XXXX......X....X.X......X.XCX", 
+"..XXX..X....X....X..XXXX.X.P...XP.X.X.X.X....X....", 
+"X.....X.X....X..........X..X.XPXXXX.X..X..XX.X.X.X", 
+".....X..XX..X..XX....X...XX.X.....X.X..XXX.......X", 
+"XXX...XXXX.....X.......XX.X.X.X.X......X.XXXXP....", 
+"..XX..XX.XX..........C...XXPP..XX...X..........XXX", 
+"XP........X..X..X......X.P....XXX.X..P............", 
+"XXX..X.XXX.X...X.X..X...X...X.P...PX..XXXX..X.....", 
+"XX.X.....X..X.XX..X.X..XPXXX...X.P.X.X.X..X.....XX", 
+".P.........PX........P..X..X.X.X..XX..XX...X..X..."};	
