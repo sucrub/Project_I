@@ -6,7 +6,8 @@ using namespace std;
 int ROWS, COLS, N = 0, M = 0;
 
 // Test case
-vector<string> park = {"CCCCC", ".....", "PXPXP"};
+vector<string> park = 
+// {"CCCCC", ".....", "PXPXP"};
 // {"XXXXXXXXXXX", 
 // "X......XPPX", 
 // "XC...P.XPPX", 
