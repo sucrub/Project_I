@@ -2,7 +2,7 @@
 #include<time.h>
 using namespace std;
 
-#define N 1000
+#define N 7
 int parent_for_non_DSU[N + 1];
 int index = 0;
 
@@ -15,7 +15,7 @@ struct Edge{
 // khoi tao ngau nhien do thi day du
 void generate_graph(Edge *mt) {
 
-    srand(time(NULL)); 
+    // srand(time(NULL)); 
 
     // for(int i = 0; i < N; i++) {
     //     for(int j = 0; j < N; j++) {
@@ -36,34 +36,36 @@ void generate_graph(Edge *mt) {
     //     }
     //}
 
-    int **temp = new int *[N];
-    for(int i = 0; i < N; i++) {
-        temp[i] = new int [N];
-    }
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; j < N; j++) {
-            if(i == j) continue;
-            if(i > j) {
-                // mt[index].u = i;
-                // mt[index].v = j;
-                // mt[index].weight = temp[j][i];
-                // index++;
-                continue;
-            }
-            else {
-                mt[index].u = i;
-                mt[index].v = j;
-                mt[index].weight = rand() % (N - 1 + 1) + 1;
-                temp[i][j] = mt[index].weight;
-                index++;
-            }
-        }
-    }
+    // int **temp = new int *[N];
+    // for(int i = 0; i < N; i++) {
+    //     temp[i] = new int [N];
+    // }
+    // for(int i = 0; i < N; i++) {
+    //     for(int j = 0; j < N; j++) {
+    //         if(i == j) continue;
+    //         if(i > j) {
+    //             // mt[index].u = i;
+    //             // mt[index].v = j;
+    //             // mt[index].weight = temp[j][i];
+    //             // index++;
+    //             continue;
+    //         }
+    //         else {
+    //             mt[index].u = i;
+    //             mt[index].v = j;
+    //             mt[index].weight = rand() % (N - 1 + 1) + 1;
+    //             temp[i][j] = mt[index].weight;
+    //             index++;
+    //         }
+    //     }
+    // }
 
-    for(int i = 0; i < N; i++) {
-        delete []temp[i];
-    }
-    delete []temp;
+    // for(int i = 0; i < N; i++) {
+    //     delete []temp[i];
+    // }
+    // delete []temp;
+    // mt[0].u = 1; mt[0].v = 4; mt[0].weight = 7;
+    // mt[1].u = 
 }
 
 /// DSU
@@ -82,19 +84,20 @@ bool cmp(Edge a, Edge b) {
 /////
 
 
+
 //////////////////////////////////////////////////
 //O(ElogV + V^2)
 void kruskal_non_DSU(Edge *mt) {
 
     int min_cost = 0;
-    make_set_for_non_DSU();
+    make_set_for_non_DSU(); // cho cái này ra ngoài 
     int edge_count = 0;
-    for(int i = 0; i < index; i++) {
+    for(int i = 0; i < 12; i++) {
 
         if(parent_for_non_DSU[mt[i].u] != parent_for_non_DSU[mt[i].v]) { 
 
             min_cost += mt[i].weight;
-            //cout << "Edge " << edge_count++ << ": " << mt[i].u << "-" << mt[i].v << ": " << mt[i].weight << endl;
+            cout << "Edge " << edge_count++ << ": " << mt[i].u << "-" << mt[i].v << ": " << mt[i].weight << endl;
             int old_parent = parent_for_non_DSU[mt[i].u];
             int new_parent = parent_for_non_DSU[mt[i].v];
             for(int j = 0; j < N; j++) {
@@ -113,10 +116,12 @@ int main() {
     double time_kruskal_non_DSU, time_sort;
     Edge *graph_for_kruskal = new Edge[N * N];
 
-    generate_graph(graph_for_kruskal);
+    for(int i = 0; i < 12; i ++) {
+        cin >> graph_for_kruskal[i].u >> graph_for_kruskal[i].v >> graph_for_kruskal[i].weight;
+    }
 
     start = clock();
-    sort(graph_for_kruskal, graph_for_kruskal + index + 1, cmp);
+    sort(graph_for_kruskal, graph_for_kruskal + 12 + 1, cmp);
     end = clock();
     time_sort = (double)(end - start) / CLOCKS_PER_SEC;
 

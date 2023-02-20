@@ -1,97 +1,109 @@
+// Tìm đường đi ngắn nhất từ nguồn tới đỉnh đó
+
 #include <iostream>
 #include <time.h>
 using namespace std;
 
-#define N 1000
-const int MAX = N*N + 100;
-int index = 0;
+#define N 1000 // số đỉnh
+const int MAX = N * N + 100;
+int index = 0; // số cạnh trong quá trình tạo đồ thị
 
-struct Edge{
-
+struct Edge
+{ // một cạnh gồm hai đỉnh u v và trọng số của cạnh đó
 	int u, v, weight;
 };
 
-void generate_graph(Edge *mt) {
+void generate_graph(Edge *mt)
+{
 
-    int **temp = new int *[N];
-    for(int i = 0; i < N; i++) {
-        temp[i] = new int [N];
-    }
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; j < N; j++) {
-            if(i == j) continue;
-            if(i > j) {
-                mt[index].u = i;
-                mt[index].v = j;
-                mt[index].weight = temp[j][i];
-                index++;
-            }
-            else {
-                mt[index].u = i;
-                mt[index].v = j;
-                mt[index].weight = rand() % (N - 10 + 1) + 10;
-                temp[i][j] = mt[index].weight;
-                index++;
-            }
-        }
-    }
+	int **temp = new int *[N];
+	for (int i = 0; i < N; i++)
+	{
+		temp[i] = new int[N];
+	} // tạo một ma trận lưu tạm thời
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			if (i == j)
+				continue; // hai đỉnh giống nhau thì bỏ qua
+			if (i > j)
+			{
+				mt[index].u = i;
+				mt[index].v = j;
+				mt[index].weight = temp[j][i]; // bảng với j i đã tạo trước đó
+				index++;
+			}
+			else
+			{ // i < j tạo một cạnh
+				mt[index].u = i;
+				mt[index].v = j;
+				mt[index].weight = rand() % (N - 10 + 1) + 10;
+				temp[i][j] = mt[index].weight;
+				index++;
+			}
+		}
+	}
 }
 
-// Chọn đường đi ngắn nhất từ đỉnh 
-int minDistance(int dist[], bool sptSet[]) {
+// Chọn đường đi ngắn nhất từ đỉnh
+int minDistance(int dist[], bool sptSet[])
+{
 
-	// Khai báo giá trị 
+	// Khai báo giá trị
 	int min = MAX, min_index;
 
 	for (int v = 0; v < N; v++)
+		// duyệt tất cả các đỉnh, nếu đỉnh v chưa trong cây và khoảng cách là nhỏ nhất thì lấy đỉnh đó
 		if (sptSet[v] == false && dist[v] <= min)
 			min = dist[v], min_index = v;
 
 	return min_index;
 }
 
-void printSolution(int dist[]) {
+void printSolution(int dist[])
+{
 
 	cout << "Vertex \t Distance from Source" << endl;
 	for (int i = 0; i < N; i++)
 		cout << i << " \t\t\t\t" << dist[i] << endl;
 }
 
-void dijkstra(Edge *graph, int src) {
+void dijkstra(Edge *graph, int src)
+{
 
-    // Mảng dist lưu giá trị đường đi ngắn nhất từ source cho tới điểm i 
+	// Mảng dist lưu giá trị đường đi ngắn nhất từ source cho tới điểm i
 	int dist[N];
 
-    // sptSet trả về true nếu điểm i đã được set 
+	// sptSet trả về true nếu điểm i đã được set
 	bool sptSet[N];
 
-    // gán giá trị cho mọi điểm là MAX và chưa sử dụng điểm đấy 
+	// gán giá trị cho khoảng cách từ src đến mọi điểm là MAX và chưa sử dụng điểm đấy
 	for (int i = 0; i < N; i++)
 		dist[i] = MAX, sptSet[i] = false;
 
-	// Khoảng cách từ nguồn tới chính nó luôn bằng 0 
+	// Khoảng cách từ nguồn tới chính nó luôn bằng 0
 	dist[src] = 0;
 
-	// Tìm đường ngắn nhất cho tất cả các đỉnh 
-	for (int count = 0; count < N - 1; count++) {
+	// Tìm đường ngắn nhất cho tất cả các đỉnh, lấy được N - 1 cạnh là xong
+	for (int count = 0; count < N - 1; count++)
+	{
 
-		// Chọn đường đi ngắn nhất từ cái đỉnh đang xét 
-        // Giá trị ban đầu luôn luôn là từ source 
+		// Chọn đường đi ngắn nhất từ cái đỉnh src
+		// Giá trị ban đầu luôn luôn là từ source
 		int u = minDistance(dist, sptSet);
 
-		// Đánh dấu điểm đã đi qua 
+		// Đánh dấu điểm đã đi qua
 		sptSet[u] = true;
 
-		// Update các giá trị 
+		// Update các giá trị
 		for (int v = 0; v < N - 1; v++)
 
 			// Update dist[v] only if is not in sptSet,
 			// there is an edge from u to v, and total
 			// weight of path from src to v through u is
 			// smaller than current value of dist[v]
-			if (!sptSet[graph[u * N - u + v].v]
-				&& dist[graph[u * N - u + v].u] != MAX
-				&& dist[graph[u * N - u + v].u] + graph[u * N - u + v].weight < dist[graph[u * N - u + v].v])
+			if (!sptSet[graph[u * N - u + v].v] && dist[graph[u * N - u + v].u] + graph[u * N - u + v].weight < dist[graph[u * N - u + v].v])
 				dist[graph[u * N - u + v].v] = dist[graph[u * N - u + v].u] + graph[u * N - u + v].weight;
 	}
 
@@ -99,14 +111,15 @@ void dijkstra(Edge *graph, int src) {
 	printSolution(dist);
 }
 
-// driver's code
-int main() {
+int main()
+{
 
 	clock_t start, end;
-    double time;
+	double time;
 
+	// tạo mảng bao gồm các cạnh
 	Edge *graph = new Edge[N * N];
-    generate_graph(graph);
+	generate_graph(graph);
 
 	start = clock();
 	dijkstra(graph, 0);
@@ -115,5 +128,5 @@ int main() {
 	time = (double)(end - start) / CLOCKS_PER_SEC;
 	cout << time;
 
-	delete []graph;
+	delete[] graph;
 }

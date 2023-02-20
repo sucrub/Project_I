@@ -1,0 +1,12 @@
+1. create initial solution
+    dùng thuật toán tham lam
+2. check solution valid 
+    kiểm tra solution có hợp lệ không bằng việc xem tất cả thành phố đã được duyệt chưa, 
+    các route có vượt quá trọng tải của xe không
+3. solve: tìm vùng lân cận ?????? 
+    thay giữa các tpho cùng một route
+    thay giữa các route
+4. tìm thành phố gần nhất
+5. aspiration criteria
+6. kiểm tra tabu
+    

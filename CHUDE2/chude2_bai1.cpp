@@ -4,7 +4,7 @@
 #include<iomanip>
 using namespace std;
 
-int N = 10000000;
+int N = 10000;
 
 /////////////////////////////////////////////////////
 
@@ -16,13 +16,13 @@ int partition_2_way(int *a, int low, int high) {
     for(int j = low; j < high; j++) { // duyet tat ca cac so
     
         if(a[j] < pivot) {
-            i = i + 1;
             swap(a[i], a[j]);
+            i = i + 1;
         }
     }
     // dua pivot ve vi tri dung cua no
-    swap(a[i + 1], a[high]);
-    return i + 1;
+    swap(a[i], a[high]);
+    return i;
 }
 
 void quick_sort_2_way(int *a, int low, int high) {
@@ -134,6 +134,9 @@ int main() {
     end = clock();
     time_use = (double)(end - start) / CLOCKS_PER_SEC;
     cout << "quicksort 3 way " << N << " numbers: " << time_use << endl;
+    // for(int i = 0; i < N; i++) {
+    //     cout << b[i];
+    // }
     delete []a;
     delete []b;
     f1.close();

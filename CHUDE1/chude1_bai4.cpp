@@ -50,7 +50,7 @@ int main() {
     cin >> s1 >> s2;
     int m = s1.length();
     int n = s2.length();
-    //dp la vector co m+1 phan tu, moi phan tu la 1 vector khac co n+1 gia tri -1
+    //dp la vector co m+1 phan tu, moi phan tu la 1 vector khac co n+1 gia tri -1 --> ma tran m+1 x n+1
     vector<vector<int> > dp(m + 1, vector<int>(n + 1, -1)); 
     cout << convertStep(s1, s2, m, n, dp);
 }

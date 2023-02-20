@@ -4,9 +4,11 @@ using namespace std;
 
 #define N 1000
 const int MAX = N + 100;
+// phân loại để xét chu kỳ
 int parent_for_DSU[N + 1];
 int parent_for_non_DSU[N + 1];
 int size[N + 1];
+// số cạnh
 int index_kruskal = 0;
 int index_prim = 0;
 bool used_no_priority[N + 1];
